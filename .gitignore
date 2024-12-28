@@ -1,0 +1,16 @@
+# Root .gitignore
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/.env
+**/.DS_Store
+**/db.sqlite3
+
+# Django specific
+backend/staticfiles/
+backend/media/
+backend/local_settings.py
+
+# IDE
+.vscode/
+.idea/

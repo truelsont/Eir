@@ -1,0 +1,101 @@
+# API and Services Architecture
+
+## Service Structure
+```
+services/
+├── rag/                  # Document retrieval and processing
+├── audio/                # Speech-to-text processing
+├── search/               # Elasticsearch service
+├── embeddings/           # Vector embeddings generation
+└── agents/               # AI agent orchestration
+```
+
+## Backend API Structure (Django)
+
+```python
+# Core Patient APIs
+/api/v1/patients/
+  - GET /                 # List patients
+  - POST /               # Create patient
+  - GET /{id}/           # Get patient details
+  - PUT /{id}/           # Update patient
+  - GET /{id}/documents/ # Get patient documents
+  - GET /{id}/history/   # Get patient history
+
+# Document Management
+/api/v1/documents/
+  - POST /              # Upload document
+  - GET /{id}/          # Get document
+  - PUT /{id}/status/   # Update processing status
+  - GET /{id}/versions/ # Document versions
+
+# Administrative
+/api/v1/admin/
+  - GET /users/         # User management
+  - GET /audit-logs/    # System audit logs
+  - GET /settings/      # System settings
+```
+
+## Services APIs (FastAPI)
+
+1. **RAG Service** `/rag/v1/`
+```python
+- POST /process         # Process new document
+- GET /retrieve        # Get relevant context
+- GET /status/{id}     # Check processing status
+```
+
+2. **Audio Service** `/audio/v1/`
+```python
+- POST /transcribe     # Transcribe audio
+- GET /status/{id}     # Check transcription status
+- GET /{id}/text       # Get transcribed text
+```
+
+3. **Search Service** `/search/v1/`
+```python
+- POST /index          # Index document
+- GET /search          # Search documents
+- POST /update         # Update index
+```
+
+4. **Embedding Service** `/embeddings/v1/`
+```python
+- POST /generate       # Generate embeddings
+- GET /status/{id}     # Check generation status
+- POST /bulk          # Bulk embedding generation
+```
+
+5. **Agent Service** `/agents/v1/`
+```python
+- POST /analyze        # Analyze medical data
+- POST /summarize      # Generate summaries
+- POST /recommend      # Get recommendations
+```
+
+## Service Communication
+```yaml
+Internal Communication:
+  - Service-to-service via RabbitMQ
+  - Async processing
+  - Event-driven updates
+
+Message Types:
+  document_processing:
+    - document_uploaded
+    - processing_started
+    - embedding_generated
+    - indexing_completed
+    
+  audio_processing:
+    - audio_uploaded
+    - transcription_started
+    - transcription_completed
+
+  agent_tasks:
+    - analysis_requested
+    - summary_generated
+    - recommendation_created
+```
+
+Would you like me to detail any specific API endpoint or elaborate on the service communication patterns?
